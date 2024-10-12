@@ -16,6 +16,7 @@ const Booking = require('./model/Booking');
 app.use(cors());
 app.use(express.json());
 
+
 // Signup route
 app.post('/signup', async (req, res) => {
     const { email, password, name, phoneNo, city } = req.body;
@@ -257,7 +258,39 @@ app.get('/user-registrations/:username', async (req, res) => {
     }
 });
 
+// Book tickets
 
+app.post('/api/bookings', async (req, res) => {
+    try {
+      const { username, bookingid, eventid, no_of_tickets } = req.body;
+  
+      // Validate that all fields are present
+      if (!username || !bookingid || !eventid || !no_of_tickets) {
+        return res.status(400).send({ message: 'Missing required fields.' });
+      }
+  
+      // Validate number of tickets
+      if (no_of_tickets < 1) {
+        return res.status(400).send({ message: 'Number of tickets must be at least 1.' });
+      }
+  
+      // Create a new booking instance
+      const newBooking = new Booking({
+        username,
+        bookingid,
+        eventid,
+        no_of_tickets,
+      });
+  
+      // Save the booking to the database
+      await newBooking.save();
+  
+      res.send({ message: 'Booking successful' });
+    } catch (error) {
+      console.error('Error creating booking:', error);
+      res.status(500).send({ message: 'Server error during booking' });
+    }
+  });
 app.listen(PORT, () => {
     console.log(`Server is running on PORT ${PORT}`);
 });

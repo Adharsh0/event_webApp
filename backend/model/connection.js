@@ -1,11 +1,3 @@
-// const mongoose=require('mongoose');
-// mongoose.connect('mongodb+srv://gagangkurup10:omen16@clusterinternship.zup2cqv.mongodb.net/logindetaildb?retryWrites=true&w=majority&appName=Clusterinternship')
-// .then((res)=>{
-//     console.log(' user DB is connected')
-// }).catch((res)=>{
-//     console.log(' user DB is not connected ')
-// })
-
 const mongoose = require('mongoose');
 
 // User Database Connection
@@ -50,4 +42,18 @@ eventDB.on('error', (err) => {
   console.log('Event DB connection error:', err);
 });
 
-module.exports = { userDB, adminDB, eventDB };
+// Booking Database Connection
+const bookingDB = mongoose.createConnection('mongodb+srv://adharshpvt:dbadharsh@cluster0.eusos.mongodb.net/bookingdb?retryWrites=true&w=majority&appName=Cluster0', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+bookingDB.on('connected', () => {
+  console.log('Booking DB is connected');
+});
+
+bookingDB.on('error', (err) => {
+  console.log('Booking DB connection error:', err);
+});
+
+module.exports = { userDB, adminDB, eventDB,bookingDB };
